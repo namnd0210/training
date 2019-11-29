@@ -21,8 +21,8 @@ const Dustbin = ({ greedy }) => {
   const [hasDropped, setHasDropped] = useState(false)
   const [{ isOver, isOverCurrent }, drop] = useDrop({
     accept: ItemTypes.ITEM,
-    drop(item, monitor) {
-      setList(list.concat(monitor.getDropResult()))
+    drop(item) {
+      setList(list.concat(item))
       setHasDropped(true)
     },
     collect: monitor => ({
@@ -30,7 +30,7 @@ const Dustbin = ({ greedy }) => {
       isOverCurrent: monitor.isOver({ shallow: true }),
     }),
   })
-  
+
   let backgroundColor = 'rgba(0, 0, 0, .5)'
   if (isOverCurrent || (isOver && greedy)) {
     backgroundColor = 'darkgreen'

@@ -16,9 +16,13 @@ function TodoList({ todoList }) {
   };
   return (
     <div style={{ ...style }}>
-      {todoList.map(item => (
-        <Item name={item.item} />
-      ))}
+      {
+        todoList.map(
+          (item, index) => (
+            <Item item={item} key={index} />
+          )
+        )
+      }
     </div>
   );
 }

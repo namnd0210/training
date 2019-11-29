@@ -2,7 +2,7 @@ import React from "react";
 import { useDrag } from "react-dnd";
 import ItemTypes from "./ItemTypes";
 
-const Item = ({ name }) => {
+const Item = ({ item }) => {
   const style = {
     border: "1px dashed gray",
     backgroundColor: "white",
@@ -11,10 +11,12 @@ const Item = ({ name }) => {
     marginBottom: "1.5rem",
     cursor: "move"
   };
-  const [, drag] = useDrag({ item: { type: ItemTypes.ITEM } })
+  const [, drag] = useDrag(
+    { item: { type: ItemTypes.ITEM, name: item.name, img: item.img } }
+  )
   return (
     <div ref={drag} style={style}>
-      {name}
+      {item.name}
     </div>
   )
 };
