@@ -1,8 +1,13 @@
 export const todoList = 
   [{
     "name": "air",
-    "img": "../img/water.png"
+    "img": "air.png"
   }, {
-    "name": "air",
-    "img": "../img/water.png"
+    "name": "water",
+    "img": "water.png"
+  }, {
+    "name": "water water",
+    "img": "puddle.png"
   }]
+
+export const list = ["air", "water", "puddle"]
