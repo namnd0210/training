@@ -9,7 +9,7 @@ function TodoList({ todoList }) {
     marginRight: "1.5rem",
     marginBottom: "1.5rem",
     cursor: "move",
-    width: "20%",
+    width: "5%",
     float: "right",
     display: "flex",
     flexDirection: "column"

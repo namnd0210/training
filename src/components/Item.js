@@ -7,16 +7,19 @@ const Item = ({ item }) => {
     border: "1px dashed gray",
     backgroundColor: "white",
     padding: "0.5rem 1rem",
-    marginRight: "1.5rem",
-    marginBottom: "1.5rem",
+    width: "64px",
+    marginBottom: "10px",
     cursor: "move"
   };
   const [, drag] = useDrag(
-    { item: { type: ItemTypes.ITEM, name: item.name, img: item.img } }
+    {
+      item: { type: ItemTypes.ITEM, ...item }
+    }
   )
+
   return (
     <div ref={drag} style={style}>
-      {item.name}
+      <img src={require("../img/" + item.img)} alt={item.name} />
     </div>
   )
 };
