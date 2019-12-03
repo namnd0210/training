@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDrop } from "react-dnd";
 import ItemTypes from "./ItemTypes";
+import Item from './Item';
 
 const getStyle = (backgroundColor) => ({
   height: "12rem",
@@ -13,6 +14,7 @@ const getStyle = (backgroundColor) => ({
   fontSize: "1rem",
   lineHeight: "normal",
   float: "left",
+  display: "flex",
   backgroundColor
 })
 
@@ -22,8 +24,11 @@ const Dustbin = ({ greedy }) => {
   const [{ isOver, isOverCurrent }, drop] = useDrop({
     accept: ItemTypes.ITEM,
     drop(item) {
-      setList(list.concat(item))
-      setHasDropped(true)
+      if (item.source === "list") {
+        const newItem = { ...item, source:"dustbin" }
+        setList(list.concat(newItem))
+        setHasDropped(true)
+      }
     },
     collect: monitor => ({
       isOver: monitor.isOver(),
@@ -39,6 +44,9 @@ const Dustbin = ({ greedy }) => {
     <div ref={drop} style={getStyle(backgroundColor)}>
 
       {hasDropped && console.log(list)}
+      {list.length !== 0 && list.map((item, index) =>
+        <Item key={index} item={item} soure="dustbin" id="drop"/>
+      )}
       {hasDropped && setHasDropped(false)}
     </div>
   )

@@ -9,7 +9,7 @@ function TodoList({ todoList }) {
     marginRight: "1.5rem",
     marginBottom: "1.5rem",
     cursor: "move",
-    width: "20%",
+    maxWidth: "20%",
     float: "right",
     display: "flex",
     flexDirection: "column"
@@ -19,7 +19,7 @@ function TodoList({ todoList }) {
       {
         todoList.map(
           (item, index) => (
-            <Item item={item} key={index} />
+            <Item item={item} key={index} source="list" id="drag"/>
           )
         )
       }

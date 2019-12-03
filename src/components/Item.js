@@ -1,22 +1,42 @@
-import React from "react";
-import { useDrag } from "react-dnd";
+import React, { useState } from "react";
+import { useDrag, useDrop } from "react-dnd";
 import ItemTypes from "./ItemTypes";
 
-const Item = ({ item }) => {
-  const style = {
+const Item = ({ item, source, id }) => {
+  const getStyle = (backgroundColor) => ({
     border: "1px dashed gray",
-    backgroundColor: "white",
+    backgroundColor,
     padding: "0.5rem 1rem",
-    marginRight: "1.5rem",
-    marginBottom: "1.5rem",
-    cursor: "move"
-  };
+    marginRight: "10px",
+    marginBottom: "10px",
+    cursor: "move",
+    width: "64px",
+    height: "64px"
+  });
   const [, drag] = useDrag(
-    { item: { type: ItemTypes.ITEM, name: item.name, img: item.img } }
+    { item: { type: ItemTypes.ITEM, name: item.name, img: item.img, source, id } }
   )
+
+  const [hasDropped, setHasDropped] = useState(false)
+  const [{ isOver, isOverCurrent }, drop] = useDrop({
+    accept: ItemTypes.ITEM,
+    drop() {
+      setHasDropped(true)
+    },
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+      isOverCurrent: monitor.isOver({ shallow: true }),
+    }),
+  })
+
+  let backgroundColor = 'rgba(0, 0, 0, .5)'
+  if (isOverCurrent || (isOver)) {
+    backgroundColor = 'darkgreen'
+  }
+  let refType = id === "drag" ? drag : drop
   return (
-    <div ref={drag} style={style}>
-      {item.name}
+    <div ref={refType} style={getStyle(backgroundColor)}>
+      <img src={require('../img/' + item.img)} />
     </div>
   )
 };
