@@ -23,10 +23,13 @@ const Dustbin = ({ greedy }) => {
   const [hasDropped, setHasDropped] = useState(false)
   const [{ isOver, isOverCurrent }, drop] = useDrop({
     accept: ItemTypes.ITEM,
-    drop(item) {
+    drop(item, monitor) {
       if (item.source === "list") {
-        const newItem = { ...item, source:"dustbin" }
-        setList(list.concat(newItem))
+        const didDrop = monitor.didDrop()
+        if (didDrop && !greedy) {
+          return
+        }
+        setList(list.concat({ ...item, source: "dustbin" }))
         setHasDropped(true)
       }
     },
@@ -36,6 +39,13 @@ const Dustbin = ({ greedy }) => {
     }),
   })
 
+  const combine = (item1, item2) => {
+    if(item1 === item2) {
+      const index = _.findIndex(list, item1)
+      console.log(index)
+    }
+  }
+
   let backgroundColor = 'rgba(0, 0, 0, .5)'
   if (isOverCurrent || (isOver && greedy)) {
     backgroundColor = 'darkgreen'
@@ -43,9 +53,9 @@ const Dustbin = ({ greedy }) => {
   return (
     <div ref={drop} style={getStyle(backgroundColor)}>
 
-      {hasDropped && console.log(list)}
+      {/* {hasDropped && console.log(list)} */}
       {list.length !== 0 && list.map((item, index) =>
-        <Item key={index} item={item} soure="dustbin" id="drop"/>
+        <Item key={index} item={item} source="dustbin" id={index} combine={combine} />
       )}
       {hasDropped && setHasDropped(false)}
     </div>

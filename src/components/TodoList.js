@@ -19,7 +19,7 @@ function TodoList({ todoList }) {
       {
         todoList.map(
           (item, index) => (
-            <Item item={item} key={index} source="list" id="drag"/>
+            <Item item={item} key={index} source="list" id={index}/>
           )
         )
       }
