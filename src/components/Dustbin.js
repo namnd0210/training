@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useDrop } from "react-dnd";
 import ItemTypes from "./ItemTypes";
 import Item from './Item';
+import _ from 'lodash';
+import data from './data'
 
 const getStyle = (backgroundColor) => ({
   height: "12rem",
@@ -29,7 +31,7 @@ const Dustbin = ({ greedy }) => {
         if (didDrop && !greedy) {
           return
         }
-        setList(list.concat({ ...item, source: "dustbin" }))
+        setList(list.concat({ ...item, id: list.length + 1, source: "dustbin" }))
         setHasDropped(true)
       }
     },
@@ -39,11 +41,24 @@ const Dustbin = ({ greedy }) => {
     }),
   })
 
+  const isCombine = (item1, item2) => {
+
+  } 
+
   const combine = (item1, item2) => {
-    if(item1 === item2) {
-      const index = _.findIndex(list, item1)
+    if (item1.name === item2.name) {
+      const index = _.indexOf(list, item1)
+      setList(
+        [
+          ..._.slice(list, 0, index),
+          { ...item1, name: "puddle", img: "puddle.png" },
+          ..._.slice(list, index+1, list.length)
+        ]
+      )
       console.log(index)
+      console.log(list)
     }
+    else console.log("-2")
   }
 
   let backgroundColor = 'rgba(0, 0, 0, .5)'
@@ -55,7 +70,7 @@ const Dustbin = ({ greedy }) => {
 
       {/* {hasDropped && console.log(list)} */}
       {list.length !== 0 && list.map((item, index) =>
-        <Item key={index} item={item} source="dustbin" id={index} combine={combine} />
+        <Item key={index} item={item} source="dustbin" id={list.length + 1} combine={combine} />
       )}
       {hasDropped && setHasDropped(false)}
     </div>

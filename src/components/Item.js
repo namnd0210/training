@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import ItemTypes from "./ItemTypes";
 
-const Item = ({ item, source, id , combine}) => {
+const Item = ({ item, source, id, combine }) => {
   const getStyle = (backgroundColor) => ({
     border: "1px dashed gray",
     backgroundColor,
@@ -20,20 +20,26 @@ const Item = ({ item, source, id , combine}) => {
   )
 
   const [hasDropped, setHasDropped] = useState(false)
-  const [{ isOver, isOverCurrent }, drop] = useDrop({
+  const [{ dropItem, isOver, isOverCurrent }, drop] = useDrop({
     accept: ItemTypes.ITEM,
-    drop(monitor) {
-      combine(item, monitor.getItem())
+    drop(item, monitor) {
+      combineItem()
       setHasDropped(true)
     },
 
     collect: (monitor) => ({
-      // dropItem: monitor.getItem(),
+      dropItem: monitor.getItem(),
       isOver: monitor.isOver(),
       isOverCurrent: monitor.isOver({ shallow: true }),
     }),
   })
-  
+
+  const combineItem = () => {
+    combine(item, dropItem)
+
+    // { hasDropped && console.log(item, dropItem) }
+  }
+
   let backgroundColor = 'rgba(0, 0, 0, .5)'
   if (isOverCurrent || (isOver)) {
     backgroundColor = 'darkgreen'
