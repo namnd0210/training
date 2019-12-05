@@ -18,9 +18,8 @@ function TodoList({ todoList }) {
     <div style={{ ...style }}>
       {
         todoList.map(
-          (item, index) => (
-            <Item item={item} key={index} source="list" id="drag"/>
-          )
+          (item, index) => 
+            item.isActive&&<Item item={item} key={index} source="list" id={todoList.length+1}/>
         )
       }
     </div>

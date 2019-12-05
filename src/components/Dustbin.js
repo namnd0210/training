@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDrop } from "react-dnd";
 import ItemTypes from "./ItemTypes";
 import Item from './Item';
+import _ from 'lodash';
 
 const getStyle = (backgroundColor) => ({
   height: "12rem",
@@ -18,15 +19,18 @@ const getStyle = (backgroundColor) => ({
   backgroundColor
 })
 
-const Dustbin = ({ greedy }) => {
+const Dustbin = ({ greedy, todoList }) => {
   const [list, setList] = useState([])
   const [hasDropped, setHasDropped] = useState(false)
   const [{ isOver, isOverCurrent }, drop] = useDrop({
     accept: ItemTypes.ITEM,
-    drop(item) {
+    drop(item, monitor) {
       if (item.source === "list") {
-        const newItem = { ...item, source:"dustbin" }
-        setList(list.concat(newItem))
+        const didDrop = monitor.didDrop()
+        if (didDrop && !greedy) {
+          return
+        }
+        setList(list.concat({ ...item, id: list.length + 1, source: "dustbin" }))
         setHasDropped(true)
       }
     },
@@ -36,6 +40,33 @@ const Dustbin = ({ greedy }) => {
     }),
   })
 
+  const getCombineItem = (item1, item2) => {
+    const index = _.findIndex(todoList, (item) =>
+      (item1.name + " " + item2.name) === item.recipe
+    )
+    if (index !== -1) {
+      return _.assign({}, _.find(todoList, (item) =>
+        (item1.name + " " + item2.name) === item.recipe)
+      )
+    }
+    else return false
+  }
+
+  const combine = (item1, item2) => {
+    const newItem = getCombineItem(item1, item2)
+    if (newItem) {
+      const index = _.indexOf(list, item1)
+      setList(
+        [
+          ..._.slice(list, 0, index),
+          { ...newItem, isActive: true },
+          ..._.slice(list, index + 1, list.length)
+        ]
+      )
+    }
+    else console.log("-2")
+  }
+
   let backgroundColor = 'rgba(0, 0, 0, .5)'
   if (isOverCurrent || (isOver && greedy)) {
     backgroundColor = 'darkgreen'
@@ -43,9 +74,9 @@ const Dustbin = ({ greedy }) => {
   return (
     <div ref={drop} style={getStyle(backgroundColor)}>
 
-      {hasDropped && console.log(list)}
+      {/* {hasDropped && console.log(list)} */}
       {list.length !== 0 && list.map((item, index) =>
-        <Item key={index} item={item} soure="dustbin" id="drop"/>
+        <Item key={index} item={item} source="dustbin" id={list.length + 1} combine={combine} />
       )}
       {hasDropped && setHasDropped(false)}
     </div>

@@ -1,13 +1,32 @@
 export const todoList = 
   [{
+    "recipe": "",
     "name": "air",
-    "img": "air.png"
+    "img": "air.png",
+    "isActive": true
   }, {
+    "recipe": "",
     "name": "water",
-    "img": "water.png"
+    "img": "water.png",
+    "isActive": true
   }, {
-    "name": "water water",
-    "img": "puddle.png"
+    "recipe": "",
+    "name": "fire",
+    "img": "fire.png",
+    "isActive": true
+  }, {
+    "recipe": "",
+    "name": "earth",
+    "img": "earth.png",
+    "isActive": true
+  }, {
+    "recipe": "water water",
+    "name": "pubble",
+    "img": "puddle.png",
+    "isActive": false
+  }, {
+    "recipe": "air air",
+    "name": "pressure",
+    "img": "pressure.png",
+    "isActive": false
   }]
-
-export const list = ["air", "water", "puddle"]
