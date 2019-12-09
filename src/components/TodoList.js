@@ -19,9 +19,11 @@ function TodoList({ todoList }) {
       {
         todoList.map(
           (item, index) => 
-            item.isActive&&<Item item={item} key={index} source="list" id={todoList.length+1}/>
+            item.isActive&&<Item item={item} key={index} source="list"/>
         )
+        
       }
+      {/* {console.log(todoList)} */}
     </div>
   );
 }

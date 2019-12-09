@@ -19,7 +19,7 @@ const getStyle = (backgroundColor) => ({
   backgroundColor
 })
 
-const Dustbin = ({ greedy, todoList }) => {
+const Dustbin = ({ greedy, todoList, active }) => {
   const [list, setList] = useState([])
   const [hasDropped, setHasDropped] = useState(false)
   const [{ isOver, isOverCurrent }, drop] = useDrop({
@@ -30,7 +30,7 @@ const Dustbin = ({ greedy, todoList }) => {
         if (didDrop && !greedy) {
           return
         }
-        setList(list.concat({ ...item, id: list.length + 1, source: "dustbin" }))
+        addItemToList(item)
         setHasDropped(true)
       }
     },
@@ -40,12 +40,16 @@ const Dustbin = ({ greedy, todoList }) => {
     }),
   })
 
+  const addItemToList = item => {
+    setList(list.concat({ ...item, id: list.length + 1, source: "dustbin" }))
+  }
+
   const getCombineItem = (item1, item2) => {
     const index = _.findIndex(todoList, (item) =>
       (item1.name + " " + item2.name) === item.recipe
     )
     if (index !== -1) {
-      return _.assign({}, _.find(todoList, (item) =>
+      return _.assign({id: item1.id}, _.find(todoList, (item) =>
         (item1.name + " " + item2.name) === item.recipe)
       )
     }
@@ -55,16 +59,17 @@ const Dustbin = ({ greedy, todoList }) => {
   const combine = (item1, item2) => {
     const newItem = getCombineItem(item1, item2)
     if (newItem) {
-      const index = _.indexOf(list, item1)
+      const indexOflist = _.indexOf(list, item1)
       setList(
         [
-          ..._.slice(list, 0, index),
-          { ...newItem, isActive: true },
-          ..._.slice(list, index + 1, list.length)
+          ..._.slice(list, 0, indexOflist),
+          { ...newItem, source: "dustbin", isActive: true, type: ItemTypes.ITEM },
+          ..._.slice(list, indexOflist + 1, list.length)
         ]
       )
+      active(newItem)
     }
-    else console.log("-2")
+    // else console.log("-2")
   }
 
   let backgroundColor = 'rgba(0, 0, 0, .5)'
@@ -78,6 +83,7 @@ const Dustbin = ({ greedy, todoList }) => {
       {list.length !== 0 && list.map((item, index) =>
         <Item key={index} item={item} source="dustbin" id={list.length + 1} combine={combine} />
       )}
+      {/* {hasDropped&&console.log(list)} */}
       {hasDropped && setHasDropped(false)}
     </div>
   )
