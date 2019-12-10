@@ -1,0 +1,21 @@
+.item {
+  padding: 0 8px;
+  margin: 10px 5px;
+  height: auto;
+  display: flex;
+}
+
+.item img {
+  cursor: pointer;
+  width: 64px;
+  height: 64px;
+}
+
+.itemName {
+  line-height: 64px;
+  text-indent: 10px;
+  font-family: Source Sans Pro,Arial,sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #d79f47;
+}

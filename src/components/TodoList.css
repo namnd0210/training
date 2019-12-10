@@ -1,0 +1,9 @@
+.todoList {
+  background-color: #380028;
+  color: #d79f47;
+  min-width: 30%;
+  height: 600px;
+  float: right;
+  display: flex;
+  flex-direction: column;
+}

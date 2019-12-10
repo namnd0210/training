@@ -1,23 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import ItemTypes from "./ItemTypes";
 import Item from './Item';
 import _ from 'lodash';
+import "./Dustbin.css"
 
-const getStyle = (backgroundColor) => ({
-  height: "12rem",
-  width: "60%",
-  marginRight: "1.5rem",
-  marginBottom: "1.5rem",
-  color: "white",
-  padding: "1rem",
-  textAlign: "center",
-  fontSize: "1rem",
-  lineHeight: "normal",
-  float: "left",
-  display: "flex",
-  backgroundColor
-})
 
 const Dustbin = ({ greedy, todoList, active }) => {
   const [list, setList] = useState([])
@@ -41,15 +28,15 @@ const Dustbin = ({ greedy, todoList, active }) => {
   })
 
   const addItemToList = item => {
-    setList(list.concat({ ...item, id: list.length + 1, source: "dustbin" }))
+    setList(list.concat({ ...item, id: list.length, source: "dustbin" }))
   }
 
   const getCombineItem = (item1, item2) => {
     const index = _.findIndex(todoList, (item) =>
       (item1.name + " " + item2.name) === item.recipe
     )
-    if (index !== -1) {
-      return _.assign({id: item1.id}, _.find(todoList, (item) =>
+    if (index !== -1 && item1.id !== item2.id) {
+      return _.assign({ id: item1.id }, _.find(todoList, (item) =>
         (item1.name + " " + item2.name) === item.recipe)
       )
     }
@@ -59,31 +46,39 @@ const Dustbin = ({ greedy, todoList, active }) => {
   const combine = (item1, item2) => {
     const newItem = getCombineItem(item1, item2)
     if (newItem) {
-      const indexOflist = _.indexOf(list, item1)
-      setList(
-        [
-          ..._.slice(list, 0, indexOflist),
-          { ...newItem, source: "dustbin", isActive: true, type: ItemTypes.ITEM },
-          ..._.slice(list, indexOflist + 1, list.length)
+      const index = _.indexOf(list, item1)
+      let newList = [
+        ..._.slice(list, 0, index),
+        { ...newItem, source: "dustbin", isActive: true, type: ItemTypes.ITEM },
+        ..._.slice(list, index + 1, list.length),
+      ]
+
+      if (item1.source === item2.source) {
+        const index2 = _.findIndex(newList, { id: item2.id })
+        newList = [
+          ..._.slice(newList, 0, index2),
+          ..._.slice(newList, index2 + 1, list.length),
         ]
-      )
+      }
+
+      setList([
+        ...newList
+      ])
       active(newItem)
     }
-    // else console.log("-2")
   }
 
   let backgroundColor = 'rgba(0, 0, 0, .5)'
   if (isOverCurrent || (isOver && greedy)) {
     backgroundColor = 'darkgreen'
   }
-  return (
-    <div ref={drop} style={getStyle(backgroundColor)}>
 
-      {/* {hasDropped && console.log(list)} */}
+  return (
+    <div ref={drop} className="workspace">
       {list.length !== 0 && list.map((item, index) =>
-        <Item key={index} item={item} source="dustbin" id={list.length + 1} combine={combine} />
+        <Item key={index} item={item} source="dustbin" id={list.length} combine={combine} />
       )}
-      {/* {hasDropped&&console.log(list)} */}
+      {hasDropped && console.log(list)}
       {hasDropped && setHasDropped(false)}
     </div>
   )

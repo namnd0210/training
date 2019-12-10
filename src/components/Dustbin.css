@@ -1,0 +1,10 @@
+.workspace {
+  overflow: hidden;
+  background-color: #260026;
+  height: 600px;
+  width: 70%;
+  float: left;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
