@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDrag, useDrop } from "react-dnd";
 import ItemTypes from "./ItemTypes";
 import "./index.css";
 
 const Item = ({ item, source, combine, left, top }) => {
-  const that = item
   const [{ canDrag }, drag] = useDrag({
     item: { ...item, type: ItemTypes.ITEM },
     collect: (monitor) => (
@@ -14,7 +13,6 @@ const Item = ({ item, source, combine, left, top }) => {
     )
   })
 
-  const [hasDropped, setHasDropped] = useState(false)
   const [{ dropItem }, drop] = useDrop({
     accept: ItemTypes.ITEM,
     drop(item, monitor) {
@@ -24,7 +22,6 @@ const Item = ({ item, source, combine, left, top }) => {
       )
         return
       combineItem()
-      setHasDropped(true)
     },
     collect: (monitor) => ({
       dropItem: monitor.getItem(),
