@@ -1,6 +1,6 @@
 import React from "react";
 import Item from "./Item";
-import "./TodoList.css";
+import "./index.css";
 
 function TodoList({ todoList }) {
   return (

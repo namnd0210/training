@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import ItemTypes from "./ItemTypes";
-import "./Item.css";
+import "./index.css";
 
-const Item = ({ item, source, id, combine }) => {
-  const [{canDrag}, drag] = useDrag({
+const Item = ({ item, source, combine, left, top }) => {
+  const that = item
+  const [{ canDrag }, drag] = useDrag({
     item: { ...item, type: ItemTypes.ITEM },
     collect: (monitor) => (
       {
@@ -14,9 +15,14 @@ const Item = ({ item, source, id, combine }) => {
   })
 
   const [hasDropped, setHasDropped] = useState(false)
-  const [{ dropItem}, drop] = useDrop({
+  const [{ dropItem }, drop] = useDrop({
     accept: ItemTypes.ITEM,
     drop(item, monitor) {
+      if (
+        (source === "list" && item.source === "list")
+        || (source === "list" && item.source === "dustbin")
+      )
+        return
       combineItem()
       setHasDropped(true)
     },
@@ -28,17 +34,16 @@ const Item = ({ item, source, id, combine }) => {
   const combineItem = () => {
     combine(item, dropItem)
   }
-
-  let refType = canDrag? drag : drop
+  let refType = canDrag ? drag : drop
 
   return (
-    <div className="item">
+    <div className="item" style={{ left, top }}>
       <img
         ref={refType}
         src={require('../img/' + item.img)}
         alt={item.name}
       />
-      {source!=="dustbin"&&<div className="itemName">{item.name}</div>}
+      {source !== "dustbin" && <div className="itemName">{item.name}</div>}
     </div>
   )
 };

@@ -1,0 +1,42 @@
+.workspace {
+  position: relative;
+  overflow: hidden;
+  background-color: #260026;
+  height: 600px;
+  width: 70%;
+  float: left;
+}
+
+.workspace .item {
+  width: 70px;
+  height: 70px;
+  position: absolute;
+}
+
+.todoList {
+  background-color: #380028;
+  color: #d79f47;
+  width: 30%;
+  height: 600px;
+  float: right;
+  display: block;
+}
+
+.todoList .item {
+  padding: 0 8px;
+  margin: 10px 5px;
+  display: flex;
+}
+
+.item img {
+  cursor: pointer;
+}
+
+.itemName {
+  line-height: 64px;
+  text-indent: 10px;
+  font-family: Source Sans Pro,Arial,sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #d79f47;
+}
