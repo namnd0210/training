@@ -4,10 +4,11 @@ import ItemTypes from "./ItemTypes";
 import "./index.css";
 
 const Item = ({ item, source, combine, left, top }) => {
-  const [{ canDrag }, drag] = useDrag({
+  const [{ isDragging, canDrag }, drag] = useDrag({
     item: { ...item, type: ItemTypes.ITEM },
     collect: (monitor) => (
       {
+        isDragging: monitor.isDragging(),
         canDrag: monitor.canDrag()
       }
     )
@@ -24,13 +25,22 @@ const Item = ({ item, source, combine, left, top }) => {
       combineItem()
     },
     collect: (monitor) => ({
+      canDrop: monitor.canDrop(),
       dropItem: monitor.getItem(),
+      isOver: monitor.isOver(),
     }),
   })
 
   const combineItem = () => {
     combine(item, dropItem)
   }
+
+  let hideSourceOnDrag = source === "dustbin" ? true : false
+  if (isDragging && hideSourceOnDrag) {
+    return <div ref={drag} />
+  }
+
+
   let refType = canDrag ? drag : drop
 
   return (

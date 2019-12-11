@@ -9,10 +9,6 @@ import _ from "lodash";
 
 
 function App() {
-  const [hideSourceOnDrag, setHideSourceOnDrag] = useState(true)
-  // const toggle = useCallback(() => setHideSourceOnDrag(!hideSourceOnDrag), [
-  //   hideSourceOnDrag,
-  // ])
   const [todoList, setTodoList] = useState([{
     "id": 1,
     "source": "list",
@@ -75,7 +71,7 @@ function App() {
   return (
     <div className="App">
       <DndProvider backend={HTML5Backend}>
-        <Dustbin hideSourceOnDrag={hideSourceOnDrag} todoList={todoList} active={active} />
+        <Dustbin todoList={todoList} active={active} />
         <TodoList todoList={todoList} />
       </DndProvider>
     </div>
